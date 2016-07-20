@@ -15,6 +15,13 @@
 import webapp2
 from twilio import twiml
 import json
+import urllib
+import urllib2
+import os
+import random
+import time
+
+auth_token=''
 
 class CallHandler(webapp2.RequestHandler):
     def post(self):
@@ -27,7 +34,14 @@ class CallHandler(webapp2.RequestHandler):
 
 class ActionURL(webapp2.RequestHandler):
     def post(self):
-        #jsonobject = json.loads(self.request.body)
+        j = json.loads(self.request.body)
+        result = j['result']
+
+        #request = urllib2.Request("https://api.api.ai/v1/intents?v=20150910", None, {"Authorization": "Bearer %s" %auth_token})
+        #response = urllib2.urlopen(req)
+        #html=response.read()
+        #json_obj=json.loads(html)
+
         self.response.headers['Content-Type'] = 'application/xml'
         resp = twiml.Response()
         resp.say("Hello world")
