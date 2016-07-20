@@ -13,13 +13,27 @@
 # limitations under the License.
 
 import webapp2
+from twilio import twiml
+import json
 
+class CallHandler(webapp2.RequestHandler):
+    def post(self):
+        sid = self.request.params.get('sid')
+        self.response.headers['Content-Type'] = 'application/xml'
+        resp = twiml.Response()
+        resp.say("How can I help you")
+        resp.record(action="http://tweek65apiioapp.appspot.com/actionurl", method="POST", maxLength="20")
+        self.response.write(str(resp))
 
-class MainPage(webapp2.RequestHandler):
-    def get(self):
-        self.response.headers['Content-Type'] = 'text/plain'
-        self.response.write('Hello, World!')
+class ActionURL(webapp2.RequestHandler):
+    def post(self):
+        #jsonobject = json.loads(self.request.body)
+        self.response.headers['Content-Type'] = 'application/xml'
+        resp = twiml.Response()
+        resp.say("Hello world")
+        self.response.write(str(resp))
 
 app = webapp2.WSGIApplication([
-    ('/', MainPage),
+    ('/incomingcall', CallHandler),
+    ('/actionurl', ActionURL),
 ], debug=True)
